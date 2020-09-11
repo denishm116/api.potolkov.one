@@ -43,7 +43,7 @@ class Kernel extends HttpKernel
             \Fruitcake\Cors\HandleCors::class,
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-
+            \App\Http\Middleware\ForceJsonResponse::class,
         ],
     ];
 

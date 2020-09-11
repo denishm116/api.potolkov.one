@@ -15,5 +15,13 @@ Route::group(['prefix' => '/auth', ['middleware' => ['throttle:20,5']]], functio
 
 Route::group(['middleware' => ['jwt.auth']], function (){
     Route::get('/home', 'HomeController@testapi');
+
 });
 Route::get('/test', 'HomeController@testapi2');
+
+Route::group(['prefix' => '/admin'], function() {
+    Route::apiResource('/catalog', 'api\CatalogController');
+    Route::post('/catalog/{catalog}/up', 'api\CatalogController@up');
+    Route::post('/catalog/{catalog}/down', 'api\CatalogController@down');
+    Route::post('/catalog/{catalog}/destroy', 'api\CatalogController@destroy');
+});
