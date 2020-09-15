@@ -7,6 +7,7 @@ use App\Models\Image;
 use Illuminate\Http\Request;
 use App\Http\Requests\CatalogRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image as Img;
@@ -62,7 +63,11 @@ class CatalogController extends Controller
         foreach ($files as $key => $file) {
 
             $path = 'images/' . uniqid() . '.jpg';
-            Img::make($file)->resize(300, 200)->save($path);
+//          Img::make($file)->resize(300, 200)->save($path);
+            $resize = Img::make($file)->resize(300, 200)->encode('jpg',100);;
+
+            Storage::disk('public')->put( $path, $resize);
+
             $image = new Image;
             $image->path = $path;
             $catalog->images()->save($image);
