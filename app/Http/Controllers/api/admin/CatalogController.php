@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\api;
+namespace App\Http\Controllers\api\admin;
 
 use App\Models\Catalog;
 use App\Models\Image;
@@ -17,30 +17,13 @@ class CatalogController extends Controller
 
     public function index()
     {
-//        return Catalog::all();
-//        dd(Catalog::with('children')->where('parent_id', NULL)->get());
         return Catalog::defaultOrder()->withDepth()->get();
-//        return Catalog::with('children')->where('parent_id', NULL)->get();
     }
 
 
     public function store(CatalogRequest $request)
     {
-
-
-//        $validator = Validator::make($request->category, [
-//            'title' => 'required|string|min:2',
-//            'parent_id' => 'integer',
-//            'description' => 'string|min:2'
-//        ]);
-//        if ($validator->fails()) {
-//            return response()->json(
-//                ['success' => false,
-//                    'errors' => $validator->errors()
-//                ], 422);
-//        }
         $slug = Str::slug($request->get('title'));
-
         $catalog = new Catalog;
         $catalog->title = $request->get('title');
         $catalog->slug = $slug;
@@ -48,43 +31,21 @@ class CatalogController extends Controller
         $catalog->description = $request->get('description');
         $catalog->save();
 
-
-//
-//
-
-//
-//        $catalog = Catalog::create([
-//            'title' => $request->category['title'],
-//            'slug' => $slug,
-//            'parent_id' => $request->category['parent_id'] ?? null,
-//        ]);
-//        return $catalog;
         $files = $request->get('files');
         foreach ($files as $key => $file) {
-
             $path = 'images/' . uniqid() . '.jpg';
-//          Img::make($file)->resize(300, 200)->save($path);
             $resize = Img::make($file)->resize(300, 200)->encode('jpg',100);;
-
             Storage::disk('public')->put( $path, $resize);
-
             $image = new Image;
             $image->path = $path;
             $catalog->images()->save($image);
-
-
         }
-
         return $catalog;
-//        $ext = $files[0]->getClientOriginalExtension();
-//        $fileName = $files[0]->getClientOriginalName();
-
     }
 
 
     public function show($catalog)
     {
-//        return $catalog;
         return Catalog::with('images')->where('slug', $catalog)->get();
     }
 

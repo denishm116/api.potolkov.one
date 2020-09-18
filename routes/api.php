@@ -20,8 +20,12 @@ Route::group(['middleware' => ['jwt.auth']], function (){
 Route::get('/test', 'HomeController@testapi2');
 
 Route::group(['prefix' => '/admin'], function() {
-    Route::apiResource('/catalog', 'api\CatalogController');
-    Route::post('/catalog/{catalog}/up', 'api\CatalogController@up');
-    Route::post('/catalog/{catalog}/down', 'api\CatalogController@down');
-    Route::post('/catalog/{catalog}/destroy', 'api\CatalogController@destroy');
+    Route::apiResource('/catalog', 'api\admin\CatalogController');
+    Route::post('/catalog/{catalog}/up', 'api\admin\CatalogController@up');
+    Route::post('/catalog/{catalog}/down', 'api\admin\CatalogController@down');
+    Route::post('/catalog/{catalog}/destroy', 'api\admin\CatalogController@destroy');
+});
+
+Route::group(['prefix' => '/frontend'], function() {
+    Route::get('/getCatalog', 'api\frontend\CatalogController@catalog');
 });
