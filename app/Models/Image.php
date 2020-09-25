@@ -8,7 +8,7 @@ class Image extends Model
 {
     public $timestamps = false;
 
-    protected $fillable = ['imageable_type', 'imageable_id', 'path', 'main_photo'];
+    protected $fillable = ['imageable_type', 'imageable_id', 'path', 'main'];
 
     public function imageable()
     {

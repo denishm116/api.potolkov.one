@@ -23,6 +23,7 @@ class CatalogController extends Controller
 
     public function store(CatalogRequest $request)
     {
+
         $slug = Str::slug($request->get('title'));
         $catalog = new Catalog;
         $catalog->title = $request->get('title');
@@ -31,16 +32,24 @@ class CatalogController extends Controller
         $catalog->description = $request->get('description');
         $catalog->save();
 
+        $files = $request->get('files')[0]['main'];
         $files = $request->get('files');
+
+
         foreach ($files as $key => $file) {
+//dd( $file['main']);
+
             $path = 'images/' . uniqid() . '.jpg';
-            $resize = Img::make($file)->resize(300, 200)->encode('jpg',100);;
-            Storage::disk('public')->put( $path, $resize);
+            $main = $file['main'];
+            $resize = Img::make($file['image'])->resize(300, 200)->encode('jpg', 100);
+            Storage::disk('public')->put($path, $resize);
+//
             $image = new Image;
             $image->path = $path;
+            $image->main = $main;
             $catalog->images()->save($image);
         }
-        return $catalog;
+//        return $catalog;
     }
 
 
@@ -71,13 +80,20 @@ class CatalogController extends Controller
 
     public function destroy($catalog)
     {
+
         $cat = Catalog::where('slug', $catalog)->first();
-                foreach ( $cat->images as $image) {
-            unlink(public_path($image->path));
+        try {
+            foreach ($cat->images as $image) {
+                if (Storage::disk('local')->exists('/public/' . $image->path)) {
+                    Storage::disk('local')->delete('/public/' . $image->path);
+                }
+            }
+            $cat->images()->delete();
+            $cat->delete();
+
+        } catch (Exception $e) {
+            return $e;
         }
 
-        $cat->images()->delete();
-
-        $cat->delete();
     }
 }
