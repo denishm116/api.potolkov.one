@@ -32,12 +32,11 @@ class CatalogController extends Controller
         $catalog->description = $request->get('description');
         $catalog->save();
 
-        $files = $request->get('files')[0]['main'];
+
         $files = $request->get('files');
 
 
         foreach ($files as $key => $file) {
-//dd( $file['main']);
 
             $path = 'images/' . uniqid() . '.jpg';
             $main = $file['main'];
@@ -49,7 +48,7 @@ class CatalogController extends Controller
             $image->main = $main;
             $catalog->images()->save($image);
         }
-//        return $catalog;
+        return $catalog;
     }
 
 

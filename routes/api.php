@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-Route::group(['prefix' => '/auth', ['middleware' => ['throttle:20,5']]], function (){
+Route::group(['prefix' => '/auth', ['middleware' => ['throttle:20,5']]], function () {
     Route::post('/register', 'api\auth\RegisterController@register');
     Route::post('/login', 'api\auth\LoginController@login');
     Route::post('/logout', 'api\auth\LoginController@logout');
@@ -13,19 +13,25 @@ Route::group(['prefix' => '/auth', ['middleware' => ['throttle:20,5']]], functio
 
 });
 
-Route::group(['middleware' => ['jwt.auth']], function (){
+Route::group(['middleware' => ['jwt.auth']], function () {
     Route::get('/home', 'HomeController@testapi');
 
 });
 Route::get('/test', 'HomeController@testapi2');
 
-Route::group(['prefix' => '/admin'], function() {
+Route::group(['prefix' => '/admin'], function () {
     Route::apiResource('/catalog', 'api\admin\CatalogController');
     Route::post('/catalog/{catalog}/up', 'api\admin\CatalogController@up');
     Route::post('/catalog/{catalog}/down', 'api\admin\CatalogController@down');
     Route::post('/catalog/{catalog}/destroy', 'api\admin\CatalogController@destroy');
+
+    Route::apiResource('/ceilings', 'api\admin\CeilingController');
+
 });
 
-Route::group(['prefix' => '/frontend'], function() {
-    Route::get('/getCatalog', 'api\frontend\CatalogController@catalog');
+Route::group(['prefix' => '/frontend'], function () {
+    Route::get('/getCatalog', 'api\frontend\FrontendController@catalog');
+    Route::get('/getChildren/{slug}', 'api\frontend\FrontendController@children');
+
+    Route::get('/getCeiling/{slug}', 'api\frontend\FrontendController@ceiling');
 });

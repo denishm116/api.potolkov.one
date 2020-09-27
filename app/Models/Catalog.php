@@ -12,13 +12,6 @@ class Catalog extends Model
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
     public $timestamps = false;
 
-//    protected static function boot() {
-//        parent::boot();
-//        static::deleting(function($images) {
-//            unlink($images->path);
-//        });
-//    }
-
 
     public function children()
     {
@@ -28,5 +21,10 @@ class Catalog extends Model
     public function images()
     {
         return $this->morphMany('App\Models\Image', 'imageable');
+    }
+
+    public function ceiling()
+    {
+        return $this->hasOne('App\Models\Ceiling', 'catalog_id');
     }
 }
