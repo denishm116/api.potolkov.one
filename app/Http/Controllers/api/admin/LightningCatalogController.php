@@ -2,39 +2,45 @@
 
 namespace App\Http\Controllers\api\admin;
 
+use App\Http\Controllers\Controller;
+
 use App\Models\Catalog;
 use App\Models\Image;
+use App\Models\LightningCatalog;
 use Illuminate\Http\Request;
-use App\Http\Requests\CatalogRequest;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image as Img;
 
-class CatalogController extends Controller
+class LightningCatalogController extends Controller
 {
-
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        return Catalog::defaultOrder()->withDepth()->get();
+        return LightningCatalog::defaultOrder()->withDepth()->get();
     }
 
-
-    public function store(CatalogRequest $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
     {
-
         $slug = Str::slug($request->get('title'));
-        $catalog = new Catalog;
+        $catalog = new LightningCatalog;
         $catalog->title = $request->get('title');
         $catalog->slug = $slug;
         $catalog->parent_id = $request->get('parent_id');
         $catalog->description = $request->get('description');
         $catalog->save();
 
-
         $files = $request->get('files');
-
 
         foreach ($files as $key => $file) {
 
@@ -51,37 +57,51 @@ class CatalogController extends Controller
         return $catalog;
     }
 
-
-    public function show($catalog)
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($lightning_catalog)
     {
-        return Catalog::with('images')->where('slug', $catalog)->get();
+        return LightningCatalog::with('images')->where('slug', $lightning_catalog)->get();
     }
 
-    public function up($catalog)
+
+    public function up($lightning_catalog)
     {
-        return Catalog::where('slug', $catalog)->first()->up();
+        return LightningCatalog::where('slug', $lightning_catalog)->first()->up();
     }
 
 
     public function down($catalog)
     {
-
-        return Catalog::where('slug', $catalog)->first()->down();
-    }
-
-    public function update(CatalogRequest $request, Catalog $catalog)
-    {
-        $catalog = Catalog::findOrFail($catalog);
-        $catalog->fill($request->except(['catalog_id']));
-        $catalog->save();
-        return $catalog;
+        return LightningCatalog::where('slug', $catalog)->first()->down();
     }
 
 
-    public function destroy($catalog)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
     {
+        //
+    }
 
-        $cat = Catalog::where('slug', $catalog)->first();
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($lightning_catalog)
+    {
+        $cat = LightningCatalog::where('slug', $lightning_catalog)->first();
 
         try {
             foreach ($cat->images as $image) {
@@ -91,11 +111,10 @@ class CatalogController extends Controller
             }
             $cat->images()->delete();
             $cat->delete();
-            return Catalog::all();
+            return $cat;
 
         } catch (Exception $e) {
             return $e;
         }
-
     }
 }

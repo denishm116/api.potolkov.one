@@ -5,18 +5,24 @@ namespace App\Http\Controllers\api\frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use App\Models\Ceiling;
+use App\Models\LightningCatalog;
 use Illuminate\Http\Request;
 
 class FrontendController extends Controller
 {
-    public function catalog()
+    public function ceiling_catalog()
     {
-        return Catalog::with('images')->defaultOrder()->withDepth()->get()->toTree();
+        return Catalog::with(['images','children', 'ceiling', 'children.ceiling'])->defaultOrder()->withDepth()->get()->toTree();
+    }
+
+    public function lightning_catalog()
+    {
+        return LightningCatalog::with(['images','children', 'lightning', 'children.lightning'])->defaultOrder()->withDepth()->get()->toTree();
     }
 
     public function children($slug)
     {
-        return Catalog::with(['children', 'children.ceiling'])->where('slug', $slug)->get();
+        return Catalog::with('children')->where('slug', $slug)->get();
     }
 
 
