@@ -36,9 +36,8 @@ class CeilingController extends Controller
 
             $path = 'images/' . uniqid() . '.jpg';
             $main = $file['main'];
-            $resize = Img::make($file['image'])->resize(300, 200)->encode('jpg', 100);
+            $resize = Img::make($file['image'])->encode('jpg', 100);
             Storage::disk('public')->put($path, $resize);
-//
             $image = new Image;
             $image->path = $path;
             $image->main = $main;

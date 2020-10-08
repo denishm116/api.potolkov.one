@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers\api\admin;
 
-use App\Models\Catalog;
+use App\Http\Controllers\Controller;
+use App\Models\ComponentCatalog;
 use App\Models\Image;
 use Illuminate\Http\Request;
-use App\Http\Requests\CatalogRequest;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Validator;
 
-
-class CatalogController extends Controller
+class ComponentCatalogController extends Controller
 {
     private $image;
 
@@ -23,60 +20,53 @@ class CatalogController extends Controller
 
     public function index()
     {
-        return Catalog::defaultOrder()->withDepth()->get();
+        return ComponentCatalog::defaultOrder()->withDepth()->get();
+
     }
 
 
-    public function store(CatalogRequest $request)
+    public function store(Request $request)
     {
-
         $slug = Str::slug($request->get('title'));
-        $catalog = new Catalog;
+        $catalog = new ComponentCatalog;
         $catalog->title = $request->get('title');
         $catalog->slug = $slug;
         $catalog->parent_id = $request->get('parent_id');
         $catalog->description = $request->get('description');
         $catalog->save();
 
-
         $files = $request->get('files');
 
         $this->image->saveImage($files, $catalog);
-
         return $catalog;
     }
 
-
-    public function show($catalog)
+    public function show($lightning_catalog)
     {
-        return Catalog::with('images')->where('slug', $catalog)->get();
+        return ComponentCatalog::with('images')->where('slug', $lightning_catalog)->get();
     }
 
-    public function up($catalog)
+
+    public function up($lightning_catalog)
     {
-        return Catalog::where('slug', $catalog)->first()->up();
+        return ComponentCatalog::where('slug', $lightning_catalog)->first()->up();
     }
 
 
     public function down($catalog)
     {
-
-        return Catalog::where('slug', $catalog)->first()->down();
-    }
-
-    public function update(CatalogRequest $request, Catalog $catalog)
-    {
-        $catalog = Catalog::findOrFail($catalog);
-        $catalog->fill($request->except(['catalog_id']));
-        $catalog->save();
-        return $catalog;
+        return ComponentCatalog::where('slug', $catalog)->first()->down();
     }
 
 
-    public function destroy($catalog)
+    public function update(Request $request, $id)
     {
+        //
+    }
 
-        $cat = Catalog::where('slug', $catalog)->first();
+    public function destroy($lightning_catalog)
+    {
+        $cat = ComponentCatalog::where('slug', $lightning_catalog)->first();
 
         try {
             foreach ($cat->images as $image) {
@@ -86,11 +76,10 @@ class CatalogController extends Controller
             }
             $cat->images()->delete();
             $cat->delete();
-            return Catalog::all();
+            return $cat;
 
         } catch (Exception $e) {
             return $e;
         }
-
     }
 }

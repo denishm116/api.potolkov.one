@@ -30,6 +30,11 @@ Route::group(['prefix' => '/admin'], function () {
     Route::post('/lightning_catalog/{lightning_catalog}/down', 'api\admin\LightningCatalogController@down');
     Route::post('/lightning_catalog/{lightning_catalog}/destroy', 'api\admin\LightningCatalogController@destroy');
 
+    Route::apiResource('/component_catalog', 'api\admin\ComponentCatalogController');
+    Route::post('/component_catalog/{component_catalog}/up', 'api\admin\ComponentCatalogController@up');
+    Route::post('/component_catalog/{component_catalog}/down', 'api\admin\ComponentCatalogController@down');
+    Route::post('/component_catalog/{component_catalog}/destroy', 'api\admin\ComponentCatalogController@destroy');
+
     Route::apiResource('/ceilings', 'api\admin\CeilingController');
 
 });
@@ -37,7 +42,8 @@ Route::group(['prefix' => '/admin'], function () {
 Route::group(['prefix' => '/frontend'], function () {
     Route::get('/getCeilingCatalog', 'api\frontend\FrontendController@ceiling_catalog');
     Route::get('/getLightningCatalog', 'api\frontend\FrontendController@lightning_catalog');
+    Route::get('/getComponentCatalog', 'api\frontend\FrontendController@component_catalog');
     Route::get('/getChildren/{slug}', 'api\frontend\FrontendController@children');
 
-    Route::get('/getCeiling/{slug}', 'api\frontend\FrontendController@ceiling');
+    Route::get('/getCeilings/{slug}', 'api\frontend\FrontendController@ceilings');
 });
