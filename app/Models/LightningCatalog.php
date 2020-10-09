@@ -22,8 +22,8 @@ class LightningCatalog extends Model
         return $this->morphMany('App\Models\Image', 'imageable');
     }
 
-    public function lightning()
+    public function lightnings()
     {
-        return $this->hasOne('App\Models\Lightning', 'lightning_catalog_id');
+        return $this->hasMany('App\Models\Lightning', 'lightning_catalog_id');
     }
 }

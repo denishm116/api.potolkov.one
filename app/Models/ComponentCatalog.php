@@ -22,8 +22,8 @@ class ComponentCatalog extends Model
         return $this->morphMany('App\Models\Image', 'imageable');
     }
 
-    public function component()
+    public function components()
     {
-        return $this->hasOne('App\Models\Component', 'component_catalog_id');
+        return $this->hasMany('App\Models\Component', 'component_catalog_id');
     }
 }

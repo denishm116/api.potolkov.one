@@ -13,12 +13,16 @@ use Intervention\Image\Facades\Image as Img;
 
 class CeilingController extends Controller
 {
+    private $image;
+    public function __construct(Image $image)
+    {
+        $this->image = $image;
+    }
 
     public function index()
     {
         return Ceiling::all();
     }
-
 
     public function store(Request $request)
     {
@@ -30,19 +34,8 @@ class CeilingController extends Controller
         $ceiling->description = $request->get('description');
         $ceiling->save();
 
-
         $files = $request->get('files');
-        foreach ($files as $key => $file) {
-
-            $path = 'images/' . uniqid() . '.jpg';
-            $main = $file['main'];
-            $resize = Img::make($file['image'])->encode('jpg', 100);
-            Storage::disk('public')->put($path, $resize);
-            $image = new Image;
-            $image->path = $path;
-            $image->main = $main;
-            $ceiling->images()->save($image);
-        }
+        $this->image->saveImage($files, $ceiling);
         return $ceiling;
     }
 
@@ -52,26 +45,28 @@ class CeilingController extends Controller
         return Ceiling::with('images')->where('slug', $slug)->get();
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy($ceiling)
     {
-        //
+        $cat = Ceiling::where('slug', $ceiling)->first();
+
+        try {
+            foreach ($cat->images as $image) {
+                if (Storage::disk('local')->exists('/public/' . $image->path)) {
+                    Storage::disk('local')->delete('/public/' . $image->path);
+                }
+            }
+            $cat->images()->delete();
+            $cat->delete();
+            return Ceiling::all();
+
+        } catch (Exception $e) {
+            return $e;
+        }
     }
 }
