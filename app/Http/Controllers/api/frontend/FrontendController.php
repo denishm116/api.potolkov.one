@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Catalog;
 use App\Models\Ceiling;
 use App\Models\Lightning;
+use App\Models\Component;
 use App\Models\LightningCatalog;
 use App\Models\ComponentCatalog;
 use Illuminate\Http\Request;
@@ -24,8 +25,10 @@ class FrontendController extends Controller
 
     public function component_catalog()
     {
-        return ComponentCatalog::with(['images','children', 'component', 'children.lightnings'])->defaultOrder()->withDepth()->get()->toTree();
+        return ComponentCatalog::with(['images','children', 'components', 'children.components'])->defaultOrder()->withDepth()->get()->toTree();
     }
+
+
 
     public function children($slug)
     {
@@ -37,6 +40,13 @@ class FrontendController extends Controller
         return LightningCatalog::with(['images','children', 'lightnings', 'children.lightnings'])->where('slug', $slug)->first();
     }
 
+    public function component_children($slug)
+    {
+        return ComponentCatalog::with(['images','children', 'components', 'children.components'])->where('slug', $slug)->first();
+    }
+
+
+
 
     public function ceilings($slug)
     {
@@ -46,6 +56,11 @@ class FrontendController extends Controller
     public function lightnings($slug)
     {
         return Lightning::with(['images', 'lightning_catalog'])->where('slug', $slug)->first();
+    }
+
+    public function components($slug)
+    {
+        return Component::with(['images', 'component_catalog'])->where('slug', $slug)->first();
     }
 
 

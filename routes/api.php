@@ -24,6 +24,9 @@ Route::group(['prefix' => '/admin'], function () {
     Route::post('/catalog/{catalog}/up', 'api\admin\CatalogController@up');
     Route::post('/catalog/{catalog}/down', 'api\admin\CatalogController@down');
     Route::post('/catalog/{catalog}/destroy', 'api\admin\CatalogController@destroy');
+    Route::get('/catalog/changeMainImage/{id}', 'api\admin\CatalogController@changeMainImage');
+    Route::get('/catalog/deleteImage/{id}', 'api\admin\CatalogController@deleteImage');
+    Route::post('/catalog/addImages', 'api\admin\CatalogController@addImages');
 
     Route::apiResource('/lightning_catalog', 'api\admin\LightningCatalogController');
     Route::post('/lightning_catalog/{lightning_catalog}/up', 'api\admin\LightningCatalogController@up');
@@ -39,6 +42,8 @@ Route::group(['prefix' => '/admin'], function () {
     Route::apiResource('/lightnings', 'api\admin\LightningController');
     Route::apiResource('/components', 'api\admin\ComponentController');
 
+
+
 });
 
 Route::group(['prefix' => '/frontend'], function () {
@@ -52,8 +57,8 @@ Route::group(['prefix' => '/frontend'], function () {
     Route::get('/getLightning/{slug}', 'api\frontend\FrontendController@lightnings');
 
     Route::get('/getComponentCatalog', 'api\frontend\FrontendController@component_catalog');
-
-
+    Route::get('/getComponentChildren/{slug}', 'api\frontend\FrontendController@component_children');
+    Route::get('/getComponent/{slug}', 'api\frontend\FrontendController@components');
 
 
 

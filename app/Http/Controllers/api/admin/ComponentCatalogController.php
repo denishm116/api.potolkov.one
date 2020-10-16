@@ -41,21 +41,21 @@ class ComponentCatalogController extends Controller
         return $catalog;
     }
 
-    public function show($lightning_catalog)
+    public function show($component_catalog)
     {
-        return ComponentCatalog::with('images')->where('slug', $lightning_catalog)->get();
+        return ComponentCatalog::with('images')->where('slug', $component_catalog)->get();
     }
 
 
-    public function up($lightning_catalog)
+    public function up($component_catalog)
     {
-        return ComponentCatalog::where('slug', $lightning_catalog)->first()->up();
+        return ComponentCatalog::where('slug', $component_catalog)->first()->up();
     }
 
 
-    public function down($catalog)
+    public function down($component_catalog)
     {
-        return ComponentCatalog::where('slug', $catalog)->first()->down();
+        return ComponentCatalog::where('slug', $component_catalog)->first()->down();
     }
 
 
@@ -64,9 +64,9 @@ class ComponentCatalogController extends Controller
         //
     }
 
-    public function destroy($lightning_catalog)
+    public function destroy($component_catalog)
     {
-        $cat = ComponentCatalog::where('slug', $lightning_catalog)->first();
+        $cat = ComponentCatalog::where('slug', $component_catalog)->first();
 
         try {
             foreach ($cat->images as $image) {

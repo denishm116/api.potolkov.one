@@ -29,7 +29,6 @@ class CatalogController extends Controller
 
     public function store(CatalogRequest $request)
     {
-
         $slug = Str::slug($request->get('title'));
         $catalog = new Catalog;
         $catalog->title = $request->get('title');
@@ -37,19 +36,15 @@ class CatalogController extends Controller
         $catalog->parent_id = $request->get('parent_id');
         $catalog->description = $request->get('description');
         $catalog->save();
-
-
         $files = $request->get('files');
-
         $this->image->saveImage($files, $catalog);
-
         return $catalog;
     }
 
 
     public function show($catalog)
     {
-        return Catalog::with('images')->where('slug', $catalog)->get();
+        return Catalog::with('images')->where('slug', $catalog)->first();
     }
 
     public function up($catalog)
@@ -72,12 +67,9 @@ class CatalogController extends Controller
         return $catalog;
     }
 
-
     public function destroy($catalog)
     {
-
         $cat = Catalog::where('slug', $catalog)->first();
-
         try {
             foreach ($cat->images as $image) {
                 if (Storage::disk('local')->exists('/public/' . $image->path)) {
@@ -87,10 +79,26 @@ class CatalogController extends Controller
             $cat->images()->delete();
             $cat->delete();
             return Catalog::all();
-
         } catch (Exception $e) {
             return $e;
         }
-
     }
+
+    public function addImages(Request $request)
+    {
+        $entity = Catalog::class;
+        $this->image->addImages($request, $entity);
+    }
+
+    public function changeMainImage($id)
+    {
+        $this->image->changeMain($id);
+    }
+
+    public function deleteImage($id)
+    {
+        $this->image->deleteImage($id);
+    }
+
+
 }
