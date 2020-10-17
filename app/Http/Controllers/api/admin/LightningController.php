@@ -40,13 +40,16 @@ class LightningController extends Controller
 
     public function show($slug)
     {
-        return Lightning::with('images')->where('slug', $slug)->get();
+        return Lightning::with('images')->where('slug', $slug)->first();
     }
 
 
     public function update(Request $request, $id)
     {
-        //
+        $lightning = Lightning::findOrFail($id);
+        $lightning->fill($request->except(['catalog_id']));
+        $lightning->save();
+        return $lightning;
     }
 
     public function destroy($lightning)
@@ -66,5 +69,21 @@ class LightningController extends Controller
         } catch (Exception $e) {
             return $e;
         }
+    }
+
+    public function addImages(Request $request)
+    {
+        $entity = Lightning::class;
+        $this->image->addImages($request, $entity);
+    }
+
+    public function changeMainImage($id)
+    {
+        $this->image->changeMain($id);
+    }
+
+    public function deleteImage($id)
+    {
+        $this->image->deleteImage($id);
     }
 }

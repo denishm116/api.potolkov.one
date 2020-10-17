@@ -59,8 +59,9 @@ class CatalogController extends Controller
         return Catalog::where('slug', $catalog)->first()->down();
     }
 
-    public function update(CatalogRequest $request, Catalog $catalog)
+    public function update(Request $request, $catalog)
     {
+
         $catalog = Catalog::findOrFail($catalog);
         $catalog->fill($request->except(['catalog_id']));
         $catalog->save();

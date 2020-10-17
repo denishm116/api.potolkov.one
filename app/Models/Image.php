@@ -50,31 +50,38 @@ class Image extends Model
 
     public function deleteImage($id)
     {
-        $image = self::find($id);
+        $image = self::findOrFail($id);
 
         Storage::disk('local')->delete('/public/' . $image->path);
         $image->delete();
-        if ($image->main) {
-            $last = self::where('imageable_type', $image->imageable_type)->where('imageable_id', $image->imageable_id)->first();
-            $last->main = 1;
-            $last->save();
+        if (isset($image) && $image->main) {
+            if ($last = self::where('imageable_type', $image->imageable_type)->where('imageable_id', $image->imageable_id)->first()) {
+                $last->main = 1;
+                $last->save();
+            }
+
         }
 
     }
 
-    public function addImages($request, $entity)
+    public function addImages($request, $entityInit)
     {
-        $class = $entity::find($request->get('entity'));
+        $entity = $entityInit::findOrFail($request->get('entity'))->with('images')->first();
+        $main = 0;
+        if (count($entity->images))
+            $main = 1;
         foreach ($request->get('images') as $key => $file) {
+            if ($key == 0 && !count($entity->images))
+                $main = 1;
+            else
+                $main = 0;
             $path = 'images/' . uniqid() . '.jpg';
-            $main = $file['main'];
             $resize = Img::make($file['image'])->resize(300, 200)->encode('jpg', 100);
             Storage::disk('public')->put($path, $resize);
-
             $image = new Image();
             $image->path = $path;
             $image->main = $main;
-            $class->images()->save($image);
+            $entity->images()->save($image);
         }
 
 

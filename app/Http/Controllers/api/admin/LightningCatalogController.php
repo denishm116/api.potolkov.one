@@ -4,13 +4,11 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\Controller;
 
-use App\Models\Catalog;
 use App\Models\Image;
 use App\Models\LightningCatalog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image as Img;
 
 class LightningCatalogController extends Controller
 {
@@ -44,7 +42,7 @@ class LightningCatalogController extends Controller
 
     public function show($lightning_catalog)
     {
-        return LightningCatalog::with('images')->where('slug', $lightning_catalog)->get();
+        return LightningCatalog::with('images')->where('slug', $lightning_catalog)->first();
     }
 
 
@@ -83,4 +81,21 @@ class LightningCatalogController extends Controller
             return $e;
         }
     }
+
+    public function addImages(Request $request)
+    {
+        $entity = LightningCatalog::class;
+        $this->image->addImages($request, $entity);
+    }
+
+    public function changeMainImage($id)
+    {
+        $this->image->changeMain($id);
+    }
+
+    public function deleteImage($id)
+    {
+        $this->image->deleteImage($id);
+    }
+
 }

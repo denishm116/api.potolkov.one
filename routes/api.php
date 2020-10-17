@@ -28,19 +28,39 @@ Route::group(['prefix' => '/admin'], function () {
     Route::get('/catalog/deleteImage/{id}', 'api\admin\CatalogController@deleteImage');
     Route::post('/catalog/addImages', 'api\admin\CatalogController@addImages');
 
+
     Route::apiResource('/lightning_catalog', 'api\admin\LightningCatalogController');
     Route::post('/lightning_catalog/{lightning_catalog}/up', 'api\admin\LightningCatalogController@up');
     Route::post('/lightning_catalog/{lightning_catalog}/down', 'api\admin\LightningCatalogController@down');
     Route::post('/lightning_catalog/{lightning_catalog}/destroy', 'api\admin\LightningCatalogController@destroy');
+    Route::get('/lightning_catalog/changeMainImage/{id}', 'api\admin\LightningCatalogController@changeMainImage');
+    Route::get('/lightning_catalog/deleteImage/{id}', 'api\admin\LightningCatalogController@deleteImage');
+    Route::post('/lightning_catalog/addImages', 'api\admin\LightningCatalogController@addImages');
+
 
     Route::apiResource('/component_catalog', 'api\admin\ComponentCatalogController');
     Route::post('/component_catalog/{component_catalog}/up', 'api\admin\ComponentCatalogController@up');
     Route::post('/component_catalog/{component_catalog}/down', 'api\admin\ComponentCatalogController@down');
     Route::post('/component_catalog/{component_catalog}/destroy', 'api\admin\ComponentCatalogController@destroy');
+    Route::get('/component_catalog/changeMainImage/{id}', 'api\admin\ComponentCatalogController@changeMainImage');
+    Route::get('/component_catalog/deleteImage/{id}', 'api\admin\ComponentCatalogController@deleteImage');
+    Route::post('/component_catalog/addImages', 'api\admin\ComponentCatalogController@addImages');
+
 
     Route::apiResource('/ceilings', 'api\admin\CeilingController');
+    Route::get('/ceilings/changeMainImage/{id}', 'api\admin\CeilingController@changeMainImage');
+    Route::get('/ceilings/deleteImage/{id}', 'api\admin\CeilingController@deleteImage');
+    Route::post('/ceilings/addImages', 'api\admin\CeilingController@addImages');
+
     Route::apiResource('/lightnings', 'api\admin\LightningController');
+    Route::get('/lightnings/changeMainImage/{id}', 'api\admin\LightningController@changeMainImage');
+    Route::get('/lightnings/deleteImage/{id}', 'api\admin\LightningController@deleteImage');
+    Route::post('/lightnings/addImages', 'api\admin\LightningController@addImages');
+
     Route::apiResource('/components', 'api\admin\ComponentController');
+    Route::get('/components/changeMainImage/{id}', 'api\admin\ComponentController@changeMainImage');
+    Route::get('/components/deleteImage/{id}', 'api\admin\ComponentController@deleteImage');
+    Route::post('/components/addImages', 'api\admin\ComponentController@addImages');
 
 
 

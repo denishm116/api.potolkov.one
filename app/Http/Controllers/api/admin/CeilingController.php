@@ -42,13 +42,16 @@ class CeilingController extends Controller
 
     public function show($slug)
     {
-        return Ceiling::with('images')->where('slug', $slug)->get();
+        return Ceiling::with('images')->where('slug', $slug)->first();
     }
 
 
     public function update(Request $request, $id)
     {
-        //
+        $catalog = Ceiling::findOrFail($id);
+        $catalog->fill($request->except(['catalog_id']));
+        $catalog->save();
+        return $catalog;
     }
 
     public function destroy($ceiling)
@@ -69,4 +72,21 @@ class CeilingController extends Controller
             return $e;
         }
     }
+
+    public function addImages(Request $request)
+    {
+        $entity = Ceiling::class;
+        $this->image->addImages($request, $entity);
+    }
+
+    public function changeMainImage($id)
+    {
+        $this->image->changeMain($id);
+    }
+
+    public function deleteImage($id)
+    {
+        $this->image->deleteImage($id);
+    }
+
 }

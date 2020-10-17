@@ -43,7 +43,7 @@ class ComponentCatalogController extends Controller
 
     public function show($component_catalog)
     {
-        return ComponentCatalog::with('images')->where('slug', $component_catalog)->get();
+        return ComponentCatalog::with('images')->where('slug', $component_catalog)->first();
     }
 
 
@@ -81,5 +81,21 @@ class ComponentCatalogController extends Controller
         } catch (Exception $e) {
             return $e;
         }
+    }
+
+    public function addImages(Request $request)
+    {
+        $entity = ComponentCatalog::class;
+        $this->image->addImages($request, $entity);
+    }
+
+    public function changeMainImage($id)
+    {
+        $this->image->changeMain($id);
+    }
+
+    public function deleteImage($id)
+    {
+        $this->image->deleteImage($id);
     }
 }
