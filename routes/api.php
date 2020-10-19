@@ -20,6 +20,13 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 Route::get('/test', 'HomeController@testapi2');
 
 Route::group(['prefix' => '/admin'], function () {
+
+
+    Route::apiResource('/ourObject', 'api\admin\OurObjectController');
+    Route::get('/ourObject/changeMainImage/{id}', 'api\admin\OurObjectController@changeMainImage');
+    Route::get('/ourObject/deleteImage/{id}', 'api\admin\OurObjectController@deleteImage');
+    Route::post('/ourObject/addImages', 'api\admin\OurObjectController@addImages');
+
     Route::apiResource('/catalog', 'api\admin\CatalogController');
     Route::post('/catalog/{catalog}/up', 'api\admin\CatalogController@up');
     Route::post('/catalog/{catalog}/down', 'api\admin\CatalogController@down');

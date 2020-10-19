@@ -24,6 +24,7 @@ class LightningController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->input());
         $slug = Str::slug($request->get('title'));
         $lightning = new Lightning;
         $lightning->title = $request->get('title');

@@ -27,4 +27,9 @@ class Catalog extends Model
     {
         return $this->hasMany('App\Models\Ceiling');
     }
+
+    public function our_objects()
+    {
+        return $this->morphToMany('App\Models\Catalog', 'presenter');
+    }
 }

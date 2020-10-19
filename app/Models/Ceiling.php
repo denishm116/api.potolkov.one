@@ -18,4 +18,8 @@ class Ceiling extends Model
     {
         return $this->belongsTo('App\Models\Catalog');
     }
+    public function our_objects()
+    {
+        return $this->morphToMany('App\Models\Catalog', 'presenter');
+    }
 }
