@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddThumbToImages extends Migration
+class AddTitleToImages extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,8 @@ class AddThumbToImages extends Migration
     public function up()
     {
         Schema::table('images', function (Blueprint $table) {
-            $table->string('thumb')->nullable()->after('path');
+            $table->string('title')->nullable()->after('thumb');
+            $table->text('description')->nullable()->after('title');
         });
     }
 
@@ -26,7 +27,7 @@ class AddThumbToImages extends Migration
     public function down()
     {
         Schema::table('images', function (Blueprint $table) {
-            $table->dropColumn('thumb');
+            //
         });
     }
 }

@@ -22,6 +22,11 @@ Route::get('/test', 'HomeController@testapi2');
 Route::group(['prefix' => '/admin'], function () {
 
 
+    Route::apiResource('/Article', 'api\admin\ArticleController');
+    Route::get('/Article/changeMainImage/{id}', 'api\admin\ArticleController@changeMainImage');
+    Route::get('/Article/deleteImage/{id}', 'api\admin\ArticleController@deleteImage');
+    Route::post('/Article/addImages', 'api\admin\ArticleController@addImages');
+
     Route::apiResource('/ourObject', 'api\admin\OurObjectController');
     Route::get('/ourObject/changeMainImage/{id}', 'api\admin\OurObjectController@changeMainImage');
     Route::get('/ourObject/deleteImage/{id}', 'api\admin\OurObjectController@deleteImage');

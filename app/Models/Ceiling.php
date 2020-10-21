@@ -20,6 +20,11 @@ class Ceiling extends Model
     }
     public function our_objects()
     {
-        return $this->morphToMany('App\Models\Catalog', 'presenter');
+        return $this->morphToMany('App\Models\OurObject', 'presenter');
+    }
+
+    public function articles()
+    {
+        return $this->morphToMany('App\Models\Articles', 'article');
     }
 }

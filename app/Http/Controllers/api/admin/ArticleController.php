@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use App\Models\Image;
-use App\models\OurObject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-
-class OurObjectController extends Controller
+class ArticleController extends Controller
 {
-
     private $image;
 
     public function __construct(Image $image)
@@ -19,63 +17,57 @@ class OurObjectController extends Controller
         $this->image = $image;
     }
 
-
     public function index()
     {
-        return OurObject::with('catalogs', 'ceilings')->get();
+        return Article::with('catalogs', 'ceilings')->get();
     }
 
 
     public function store(Request $request)
     {
-
-        $ourObject = OurObject::make([
+        $article = Article::make([
             'title' => $request->get('title'),
-            'address' => $request->get('address'),
-            'square' => $request->get('square'),
+            'meta_description' => $request->get('meta_description'),
             'description' => $request->get('description'),
-            'price' => $request->get('price'),
         ]);
-        $ourObject->save();
+        $article->save();
         $files = $request->get('images');
-        $this->image->saveImage($files, $ourObject, true);
-        $ourObject->catalogs()->attach($request->get('catalogs'));
-        $ourObject->ceilings()->attach($request->get('ceilings'));
 
+        $this->image->saveImage($files, $article, true);
+        $article->catalogs()->attach($request->get('catalogs'));
+        $article->ceilings()->attach($request->get('ceilings'));
     }
 
 
     public function show($id)
     {
-        return OurObject::with('images', 'catalogs', 'ceilings')->where('id', $id)->first();
+        return Article::with('images', 'catalogs', 'ceilings')->where('id', $id)->first();
     }
 
 
     public function update(Request $request, $id)
     {
-
-        $ourObject = OurObject::findOrFail($id);
-        $ourObject->fill($request->except(['id']));
-        $ourObject->save();
-        $ourObject->catalogs()->sync($request->get('catalogs'));
-        $ourObject->ceilings()->sync($request->get('ceilings'));
-        return $ourObject;
+        $article = Article::findOrFail($id);
+        $article->fill($request->except(['id']));
+        $article->save();
+        $article->catalogs()->sync($request->get('catalogs'));
+        $article->ceilings()->sync($request->get('ceilings'));
+        return $article;
     }
 
 
     public function destroy($id)
     {
-        $obj = OurObject::where('id', $id)->first();
+        $obj = Article::where('id', $id)->first();
         try {
             foreach ($obj->images as $image) {
                 if (Storage::disk('local')->exists('/public/' . $image->path)) {
                     Storage::disk('local')->delete('/public/' . $image->path);
-                    Storage::disk('local')->delete('/public/' . $image->thumb);
                 }
             }
             $obj->images()->delete();
             $obj->delete();
-            return OurObject::all();
+            return Article::all();
         } catch (Exception $e) {
             return $e;
         }
@@ -83,8 +75,9 @@ class OurObjectController extends Controller
 
     public function addImages(Request $request)
     {
-        $entity = OurObject::class;
-        $this->image->addImages($request, $entity, true);
+
+        $entity = Article::class;
+        $this->image->addImagesWithTitle($request, $entity, true);
     }
 
     public function changeMainImage($id)

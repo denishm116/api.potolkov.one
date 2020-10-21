@@ -23,7 +23,7 @@ class Image extends Model
     {
         return DB::transaction(function () use ($files, $entity, $thumbs) {
             foreach ($files as $key => $file) {
-                $this->imageSaver($file, $file['main'], $entity, $thumbs);
+                $this->imageSaver($file, $file['main'], $file['title'] ?? false, $file['description'] ?? false, $entity, $thumbs);
             }
         });
 
@@ -60,23 +60,41 @@ class Image extends Model
 
     public function addImages($request, $entityInit, $thumbs = false)
     {
-        $entity = $entityInit::findOrFail($request->get('entity'))->with('images')->first();
+        $entity = $entityInit::with('images')->where('id', $request->get('entity'))->first();
+        $main = 0;
+        if (count($entity->images))
+            $main = 1;
+//        return DB::transaction(function () use ($request, $entity, $thumbs) {
+            foreach ($request->get('images') as $key => $file) {
+
+                if ($key == 0 && !count($entity->images))
+                    $main = 1;
+                else
+                    $main = 0;
+                $this->imageSaver($file, $main, $file['title'] ?? null, $file['description'] ?? null, $entity, true );
+            }
+//        });
+    }
+    public function addImagesWithTitle($request, $entityInit, $thumbs = false)
+    {
+        $entity = $entityInit::with('images')->where('id', $request->get('entity'))->first();
+//        dd($entity);
         $main = 0;
         if (count($entity->images))
             $main = 1;
         return DB::transaction(function () use ($request, $entity, $thumbs) {
             foreach ($request->get('images') as $key => $file) {
+
                 if ($key == 0 && !count($entity->images))
                     $main = 1;
                 else
                     $main = 0;
-                $this->imageSaver($file, $main, $entity, true);
+                $this->imageSaver($file, $main,  $file['title'] ?? null, $file['description'] ?? null, $entity, true );
             }
         });
-
     }
 
-    private function imageSaver($file, $main, $entity, $thumbs)
+    private function imageSaver($file, $main, $title, $description, $entity, $thumbs)
     {
         $p = uniqid();
         $path = 'images/' . $p . '.jpg';
@@ -86,6 +104,12 @@ class Image extends Model
         $image = new Image();
         $image->path = $path;
         $image->main = $main;
+//dd($file);
+        if ($title && $description) {
+            $image->title = $title;
+            $image->description = $description;
+        }
+
         if ($thumbs) {
             $resizeThumb = Img::make($file['image'])->resize(100, 68)->encode('jpg', 90);
             Storage::disk('public')->put($thumbPath, $resizeThumb);
@@ -93,11 +117,5 @@ class Image extends Model
         }
         $entity->images()->save($image);
     }
-//    protected static function boot()
-//    {
-//        parent::boot();
-//        static::deleting(function ($image) {
-//            delete($image->path);
-//        });
-//    }
+
 }
