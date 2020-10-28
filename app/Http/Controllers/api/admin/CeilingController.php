@@ -21,7 +21,7 @@ class CeilingController extends Controller
 
     public function index()
     {
-        return Ceiling::all();
+        return Ceiling::with('catalog')->get();
     }
 
     public function store(Request $request)
@@ -35,14 +35,14 @@ class CeilingController extends Controller
         $ceiling->save();
 
         $files = $request->get('files');
-        $this->image->saveImage($files, $ceiling);
+        $this->image->saveImage($files, $ceiling, true);
         return $ceiling;
     }
 
 
-    public function show($slug)
+    public function show($id)
     {
-        return Ceiling::with('images')->where('slug', $slug)->first();
+        return Ceiling::with('images', 'catalog')->where('id', $id)->first();
     }
 
 
@@ -76,7 +76,7 @@ class CeilingController extends Controller
     public function addImages(Request $request)
     {
         $entity = Ceiling::class;
-        $this->image->addImages($request, $entity);
+        $this->image->addImages($request, $entity, true);
     }
 
     public function changeMainImage($id)

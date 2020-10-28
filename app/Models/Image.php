@@ -64,24 +64,6 @@ class Image extends Model
         $main = 0;
         if (count($entity->images))
             $main = 1;
-//        return DB::transaction(function () use ($request, $entity, $thumbs) {
-            foreach ($request->get('images') as $key => $file) {
-
-                if ($key == 0 && !count($entity->images))
-                    $main = 1;
-                else
-                    $main = 0;
-                $this->imageSaver($file, $main, $file['title'] ?? null, $file['description'] ?? null, $entity, true );
-            }
-//        });
-    }
-    public function addImagesWithTitle($request, $entityInit, $thumbs = false)
-    {
-        $entity = $entityInit::with('images')->where('id', $request->get('entity'))->first();
-//        dd($entity);
-        $main = 0;
-        if (count($entity->images))
-            $main = 1;
         return DB::transaction(function () use ($request, $entity, $thumbs) {
             foreach ($request->get('images') as $key => $file) {
 
@@ -89,7 +71,7 @@ class Image extends Model
                     $main = 1;
                 else
                     $main = 0;
-                $this->imageSaver($file, $main,  $file['title'] ?? null, $file['description'] ?? null, $entity, true );
+                $this->imageSaver($file, $main, $file['title'] ?? null, $file['description'] ?? null, $entity, true );
             }
         });
     }
@@ -104,7 +86,7 @@ class Image extends Model
         $image = new Image();
         $image->path = $path;
         $image->main = $main;
-//dd($file);
+
         if ($title && $description) {
             $image->title = $title;
             $image->description = $description;

@@ -27,7 +27,7 @@ class ArticleController extends Controller
     {
         $article = Article::make([
             'title' => $request->get('title'),
-            'meta_description' => $request->get('meta_description'),
+            'meta_description' => $request->get('metaDescription'),
             'description' => $request->get('description'),
         ]);
         $article->save();
@@ -75,9 +75,8 @@ class ArticleController extends Controller
 
     public function addImages(Request $request)
     {
-
         $entity = Article::class;
-        $this->image->addImagesWithTitle($request, $entity, true);
+        $this->image->addImages($request, $entity, true);
     }
 
     public function changeMainImage($id)

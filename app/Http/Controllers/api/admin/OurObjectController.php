@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Image;
 use App\models\OurObject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 
@@ -22,13 +23,12 @@ class OurObjectController extends Controller
 
     public function index()
     {
-        return OurObject::with('catalogs', 'ceilings')->get();
+        return OurObject::with('images', 'catalogs', 'ceilings')->get();
     }
 
 
     public function store(Request $request)
     {
-
         $ourObject = OurObject::make([
             'title' => $request->get('title'),
             'address' => $request->get('address'),
@@ -38,10 +38,11 @@ class OurObjectController extends Controller
         ]);
         $ourObject->save();
         $files = $request->get('images');
-        $this->image->saveImage($files, $ourObject, true);
-        $ourObject->catalogs()->attach($request->get('catalogs'));
-        $ourObject->ceilings()->attach($request->get('ceilings'));
-
+        return DB::transaction(function () use ($request, $files, $ourObject) {
+            $ourObject->image->saveImage($files, $ourObject, true);
+            $ourObject->catalogs()->attach($request->get('catalogs'));
+            $ourObject->ceilings()->attach($request->get('ceilings'));
+        });
     }
 
 
@@ -53,7 +54,6 @@ class OurObjectController extends Controller
 
     public function update(Request $request, $id)
     {
-
         $ourObject = OurObject::findOrFail($id);
         $ourObject->fill($request->except(['id']));
         $ourObject->save();

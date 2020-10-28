@@ -8,10 +8,11 @@ use Kalnoy\Nestedset\NodeTrait;
 class Catalog extends Model
 {
     use NodeTrait;
+
     protected $fillable = ['title', 'slug', 'parent_id', 'description'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
     public $timestamps = false;
-
+    protected $appends = ['mainImage'];
 
     public function children()
     {
@@ -32,8 +33,13 @@ class Catalog extends Model
     {
         return $this->morphToMany('App\Models\OurObject', 'presenter');
     }
+
     public function articles()
     {
         return $this->morphToMany('App\Models\Articles', 'article');
+    }
+
+    public function getMainImageAttribute() {
+        return $this->images->where('main', 1)->first()->path ?? null;
     }
 }
