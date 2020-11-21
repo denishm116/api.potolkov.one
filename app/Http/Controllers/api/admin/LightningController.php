@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 class LightningController extends Controller
 {
     private $image;
+
     public function __construct(Image $image)
     {
         $this->image = $image;
@@ -19,12 +20,11 @@ class LightningController extends Controller
 
     public function index()
     {
-        return Lightning::all();
+        return Lightning::with('lightning_catalog')->get();
     }
 
     public function store(Request $request)
     {
-        dd($request->input());
         $slug = Str::slug($request->get('title'));
         $lightning = new Lightning;
         $lightning->title = $request->get('title');
@@ -32,18 +32,15 @@ class LightningController extends Controller
         $lightning->lightning_catalog_id = $request->get('catalog_id');
         $lightning->description = $request->get('description');
         $lightning->save();
-
         $files = $request->get('files');
-        $this->image->saveImage($files, $lightning);
+        $this->image->saveImage($files, $lightning, true);
         return $lightning;
     }
-
 
     public function show($slug)
     {
         return Lightning::with('images')->where('slug', $slug)->first();
     }
-
 
     public function update(Request $request, $id)
     {
@@ -55,7 +52,7 @@ class LightningController extends Controller
 
     public function destroy($lightning)
     {
-        $cat = Lightning::where('slug',$lightning )->first();
+        $cat = Lightning::where('slug', $lightning)->first();
 
         try {
             foreach ($cat->images as $image) {
@@ -66,7 +63,6 @@ class LightningController extends Controller
             $cat->images()->delete();
             $cat->delete();
             return Lightning::all();
-
         } catch (Exception $e) {
             return $e;
         }
@@ -75,7 +71,7 @@ class LightningController extends Controller
     public function addImages(Request $request)
     {
         $entity = Lightning::class;
-        $this->image->addImages($request, $entity);
+        $this->image->addImages($request, $entity, true);
     }
 
     public function changeMainImage($id)

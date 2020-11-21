@@ -8,6 +8,7 @@ class OurObject extends Model
 {
     protected $fillable = ['title',  'address', 'square', 'description', 'price'];
     protected $hidden = ['updated_at', 'deleted_at'];
+    protected $appends = ['mainImage'];
 
     public function images()
     {
@@ -22,5 +23,9 @@ class OurObject extends Model
     public function ceilings()
     {
         return $this->morphedByMany('App\Models\Ceiling', 'presenter');
+    }
+
+    public function getMainImageAttribute() {
+        return $this->images->where('main', 1)->first()->path ?? null;
     }
 }

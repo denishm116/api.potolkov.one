@@ -24,7 +24,7 @@ class Catalog extends Model
         return $this->morphMany('App\Models\Image', 'imageable');
     }
 
-    public function ceiling()
+    public function ceilings()
     {
         return $this->hasMany('App\Models\Ceiling');
     }
@@ -42,4 +42,5 @@ class Catalog extends Model
     public function getMainImageAttribute() {
         return $this->images->where('main', 1)->first()->path ?? null;
     }
+
 }

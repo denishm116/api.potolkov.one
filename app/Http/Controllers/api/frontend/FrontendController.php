@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\api\frontend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderFromSite;
 use App\Models\Article;
 use App\Models\Catalog;
 use App\Models\Ceiling;
@@ -12,12 +13,13 @@ use App\Models\LightningCatalog;
 use App\Models\ComponentCatalog;
 use App\models\OurObject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class FrontendController extends Controller
 {
     public function ceiling_catalog()
     {
-        return Catalog::with(['images', 'children', 'ceiling', 'children.ceiling'])->defaultOrder()->withDepth()->get()->toTree();
+        return Catalog::with(['images', 'children', 'ceilings', 'children.ceilings'])->defaultOrder()->withDepth()->get()->toTree();
     }
 
     public function lightning_catalog()
@@ -33,7 +35,7 @@ class FrontendController extends Controller
 
     public function children($slug)
     {
-        return Catalog::with(['images', 'children', 'ceiling', 'children.ceiling'])->where('slug', $slug)->first();
+        return Catalog::with(['images', 'children', 'ceilings', 'children.ceilings'])->where('slug', $slug)->first();
     }
 
     public function lightning_children($slug)
@@ -108,5 +110,9 @@ class FrontendController extends Controller
     public function ourObject($id)
     {
         return ourObject::with('images', 'catalogs', 'ceilings')->where('id', $id)->first();
+    }
+
+    public function sendMail(Request $request) {
+        Mail::to('gospodinpotolkov@yandex.ru')->send(new OrderFromSite($request->all()));
     }
 }

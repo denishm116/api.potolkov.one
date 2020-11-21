@@ -8,6 +8,7 @@ class Lightning extends Model
 {
     protected $fillable = ['title', 'slug', 'catalog_id', 'description'];
     public $timestamps = false;
+    protected $appends = ['mainImage'];
 
     public function images()
     {
@@ -18,4 +19,10 @@ class Lightning extends Model
     {
         return $this->belongsTo('App\Models\LightningCatalog');
     }
+
+    public function getMainImageAttribute() {
+        return $this->images->where('main', 1)->first()->path ?? null;
+    }
+
+
 }

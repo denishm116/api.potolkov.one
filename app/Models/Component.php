@@ -8,6 +8,7 @@ class Component extends Model
 {
     protected $fillable = ['title', 'slug', 'catalog_id', 'description'];
     public $timestamps = false;
+    protected $appends = ['mainImage'];
 
     public function images()
     {
@@ -17,5 +18,10 @@ class Component extends Model
     public function component_catalog()
     {
         return $this->belongsTo('App\Models\ComponentCatalog');
+    }
+
+    public function getMainImageAttribute()
+    {
+        return $this->images->where('main', 1)->first()->path ?? null;
     }
 }

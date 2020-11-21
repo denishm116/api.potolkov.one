@@ -12,15 +12,16 @@ use Illuminate\Support\Str;
 class ComponentController extends Controller
 {
     private $image;
+
     public function __construct(Image $image)
     {
         $this->image = $image;
     }
+
     public function index()
     {
-        return Component::all();
+        return Component::with('component_catalog')->get();
     }
-
 
     public function store(Request $request)
     {
@@ -31,9 +32,8 @@ class ComponentController extends Controller
         $component->component_catalog_id = $request->get('catalog_id');
         $component->description = $request->get('description');
         $component->save();
-
         $files = $request->get('files');
-        $this->image->saveImage($files, $component);
+        $this->image->saveImage($files, $component,true);
         return $component;
     }
 
@@ -74,7 +74,7 @@ class ComponentController extends Controller
     public function addImages(Request $request)
     {
         $entity = Component::class;
-        $this->image->addImages($request, $entity);
+        $this->image->addImages($request, $entity, true);
     }
 
     public function changeMainImage($id)

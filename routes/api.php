@@ -100,5 +100,5 @@ Route::group(['prefix' => '/frontend'], function () {
     Route::get('/ourObjects', 'api\frontend\FrontendController@ourObjects');
     Route::get('/ourObject/{id}', 'api\frontend\FrontendController@ourObject');
 
-
+    Route::post('/sendMail', 'api\frontend\FrontendController@sendMail');
 });

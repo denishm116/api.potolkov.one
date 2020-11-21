@@ -23,7 +23,7 @@ class OurObjectController extends Controller
 
     public function index()
     {
-        return OurObject::with('images', 'catalogs', 'ceilings')->get();
+        return OurObject::with('images', 'catalogs', 'ceilings')->orderBy('id', 'DESC')->get();
     }
 
 
@@ -39,7 +39,8 @@ class OurObjectController extends Controller
         $ourObject->save();
         $files = $request->get('images');
         return DB::transaction(function () use ($request, $files, $ourObject) {
-            $ourObject->image->saveImage($files, $ourObject, true);
+            $image = new Image();
+            $image->saveImage($files, $ourObject, true);
             $ourObject->catalogs()->attach($request->get('catalogs'));
             $ourObject->ceilings()->attach($request->get('ceilings'));
         });

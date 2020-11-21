@@ -14,6 +14,7 @@ use Intervention\Image\Facades\Image as Img;
 class CeilingController extends Controller
 {
     private $image;
+
     public function __construct(Image $image)
     {
         $this->image = $image;
@@ -40,9 +41,9 @@ class CeilingController extends Controller
     }
 
 
-    public function show($id)
+    public function show($slug)
     {
-        return Ceiling::with('images', 'catalog')->where('id', $id)->first();
+        return Ceiling::with('images', 'catalog')->where('slug', $slug)->first();
     }
 
 
@@ -59,12 +60,15 @@ class CeilingController extends Controller
         $cat = Ceiling::where('slug', $ceiling)->first();
 
         try {
-            foreach ($cat->images as $image) {
-                if (Storage::disk('local')->exists('/public/' . $image->path)) {
-                    Storage::disk('local')->delete('/public/' . $image->path);
+            if (isset($cat->images)) {
+                foreach ($cat->images as $image) {
+                    if (Storage::disk('local')->exists('/public/' . $image->path)) {
+                        Storage::disk('local')->delete('/public/' . $image->path);
+                    }
                 }
+                $cat->images()->delete();
             }
-            $cat->images()->delete();
+
             $cat->delete();
             return Ceiling::all();
 

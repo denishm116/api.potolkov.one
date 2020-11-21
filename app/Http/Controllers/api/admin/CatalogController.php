@@ -23,7 +23,7 @@ class CatalogController extends Controller
 
     public function index()
     {
-        return Catalog::defaultOrder()->withDepth()->get();
+        return Catalog::defaultOrder()->with('ceilings')->withDepth()->get();
     }
 
 

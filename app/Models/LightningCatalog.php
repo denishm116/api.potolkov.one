@@ -11,6 +11,7 @@ class LightningCatalog extends Model
     protected $fillable = ['title', 'slug', 'parent_id', 'description'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
     public $timestamps = false;
+    protected $appends = ['mainImage'];
 
     public function children()
     {
@@ -25,5 +26,10 @@ class LightningCatalog extends Model
     public function lightnings()
     {
         return $this->hasMany('App\Models\Lightning', 'lightning_catalog_id');
+    }
+
+    public function getMainImageAttribute()
+    {
+        return $this->images->where('main', 1)->first()->path ?? null;
     }
 }

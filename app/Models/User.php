@@ -11,32 +11,14 @@ class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    public const ROLE_USER = 'user';
+    public const ROLE_ADMIN = 'admin';
+    public const ROLE_MANAGER = 'manager';
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    protected $fillable = ['name', 'email', 'password', 'role'];
+    protected $hidden = ['password', 'remember_token',];
+    protected $casts = ['email_verified_at' => 'datetime',];
+    protected $appends = ['isAdmin', 'isManager', 'isUser'];
 
     public function getJWTIdentifier()
     {
@@ -48,11 +30,45 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public static function rolesList(): array
+    {
+        return [
+            self::ROLE_USER => 'User',
+            self::ROLE_ADMIN => 'Admin',
+            self::ROLE_MANAGER => 'Manager',
+        ];
+    }
+
     public function social() {
         return $this->hasMany(UserSocial::class, 'user_id', 'id');
     }
+
     public function hasSocialLinked($service): bool
     {
         return $this->social->where('service', $service)->count();
     }
+
+    public function changeRole($role): void
+    {
+        if (!array_key_exists($role, self::rolesList())) {
+            throw new \InvalidArgumentException('Undefined role "' . $role . '"');
+        }
+        if ($this->role === $role) {
+            throw new \DomainException('Role is already assigned.');
+        }
+        $this->update(['role' => $role]);
+    }
+
+    public function getIsAdminAttribute() {
+        return $this->role === self::ROLE_ADMIN;
+    }
+
+    public function getIsManagerAttribute() {
+        return $this->role === self::ROLE_MANAGER;
+    }
+
+    public function getIsUserAttribute() {
+        return $this->role === self::ROLE_USER;
+    }
+
 }
