@@ -61,7 +61,10 @@ class ComponentCatalogController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $component_catalog = ComponentCatalog::findOrFail($id);
+        $component_catalog->fill($request->except(['lightning_id']));
+        $component_catalog->save();
+        return $component_catalog;
     }
 
     public function destroy($component_catalog)

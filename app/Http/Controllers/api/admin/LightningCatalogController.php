@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Http\Controllers\Controller;
 
+use App\Lightning;
 use App\Models\Image;
 use App\Models\LightningCatalog;
 use Illuminate\Http\Request;
@@ -60,7 +61,10 @@ class LightningCatalogController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $lightning_catalog = LightningCatalog::findOrFail($id);
+        $lightning_catalog->fill($request->except(['lightning_id']));
+        $lightning_catalog->save();
+        return $lightning_catalog;
     }
 
     public function destroy($lightning_catalog)
