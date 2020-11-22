@@ -29,7 +29,7 @@ class CatalogRequest extends FormRequest
             'slug' => 'string|min:2',
 
            'description' => 'string|min:2',
-           'files' => 'max:5'
+           'files' => 'max:5000'
         ];
 
         switch ($this->getMethod())

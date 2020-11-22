@@ -44,7 +44,6 @@ class CatalogController extends Controller
 
     public function show($catalog)
     {
-
         return Catalog::with('images')->where('id', $catalog)->first();
     }
 
