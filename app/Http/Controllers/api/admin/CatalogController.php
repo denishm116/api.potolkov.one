@@ -36,8 +36,8 @@ class CatalogController extends Controller
         $catalog->parent_id = $request->get('parent_id');
         $catalog->description = $request->get('description');
         $catalog->save();
-        $files = $request->get('files');
-        $this->image->saveImage($files, $catalog);
+//        $files = $request->get('files');
+//        $this->image->saveImage($files, $catalog);
         return $catalog;
     }
 
