@@ -27,7 +27,7 @@ class CatalogController extends Controller
     }
 
 
-    public function store(CatalogRequest $request)
+    public function store(Request $request)
     {
         $slug = Str::slug($request->get('title'));
         $catalog = new Catalog;
