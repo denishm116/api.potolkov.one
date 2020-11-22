@@ -26,7 +26,6 @@ class CatalogController extends Controller
         return Catalog::defaultOrder()->with('ceilings')->withDepth()->get();
     }
 
-
     public function store(Request $request)
     {
         $slug = Str::slug($request->get('title'));
@@ -35,7 +34,6 @@ class CatalogController extends Controller
         $catalog->slug = $slug;
         $catalog->parent_id = $request->get('parent_id');
         $catalog->description = $request->get('description');
-        dd($catalog, $request);
         $catalog->save();
         $files = $request->get('files');
         $this->image->saveImage($files, $catalog);
