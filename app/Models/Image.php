@@ -45,6 +45,7 @@ class Image extends Model
     {
         $image = self::findOrFail($id);
         Storage::disk('local')->delete('/public/' . $image->path);
+
         if ($image->thumb)
             Storage::disk('local')->delete('/public/' . $image->thumb);
 
