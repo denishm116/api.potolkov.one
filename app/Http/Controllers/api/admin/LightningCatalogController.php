@@ -42,7 +42,7 @@ class LightningCatalogController extends Controller
 
     public function show($lightning_catalog)
     {
-        return LightningCatalog::with('images')->where('slug', $lightning_catalog)->first();
+        return LightningCatalog::with('images')->where('id', $lightning_catalog)->first();
     }
 
 

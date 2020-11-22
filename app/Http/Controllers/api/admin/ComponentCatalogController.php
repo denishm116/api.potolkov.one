@@ -43,7 +43,7 @@ class ComponentCatalogController extends Controller
 
     public function show($component_catalog)
     {
-        return ComponentCatalog::with('images')->where('slug', $component_catalog)->first();
+        return ComponentCatalog::with('images')->where('id', $component_catalog)->first();
     }
 
 
