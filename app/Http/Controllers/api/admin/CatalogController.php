@@ -61,7 +61,6 @@ class CatalogController extends Controller
 
     public function update(Request $request, $catalog)
     {
-
         $catalog = Catalog::findOrFail($catalog);
         $catalog->fill($request->except(['catalog_id']));
         $catalog->save();
