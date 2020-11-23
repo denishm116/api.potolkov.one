@@ -22,11 +22,11 @@ class Image extends Model
     public function saveImage($files, $entity, $thumbs = false)
     {
         if ($files) {
-            return DB::transaction(function () use ($files, $entity, $thumbs) {
+//            return DB::transaction(function () use ($files, $entity, $thumbs) {
                 foreach ($files as $key => $file) {
                     $this->imageSaver($file, $file['main'], $file['title'] ?? false, $file['description'] ?? false, $entity, $thumbs);
                 }
-            });
+//            });
         }
     }
 
