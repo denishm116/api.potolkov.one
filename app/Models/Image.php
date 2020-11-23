@@ -83,7 +83,7 @@ class Image extends Model
         $p = uniqid();
         $path = 'images/' . $p . '.jpg';
         $thumbPath = 'thumbs/' . $p . '.jpg';
-        $resize = Img::make($file['image'])->encode('jpg', 70);
+        $resize = Img::make($file['image'])->encode('jpg', 90);
         Storage::disk('public')->put($path, $resize);
         $image = new Image();
         $image->path = $path;
@@ -95,7 +95,7 @@ class Image extends Model
         }
 
         if ($thumbs) {
-            $resizeThumb = Img::make($file['image'])->resize(100, 68)->encode('jpg', 70);
+            $resizeThumb = Img::make($file['image'])->resize(100, 68)->encode('jpg', 90);
             Storage::disk('public')->put($thumbPath, $resizeThumb);
             $image->thumb = $thumbPath;
         }
