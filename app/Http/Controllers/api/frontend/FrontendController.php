@@ -68,7 +68,7 @@ class FrontendController extends Controller
     {
         return OurObject::with('images', 'catalogs', 'ceilings')->whereHas('ceilings', function($q) use($slug) {
             $q->where('slug', $slug);
-        })->get();
+        })->get() ?? false;
     }
 
     public function ArticlesForCeiling($slug)
