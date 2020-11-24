@@ -36,10 +36,9 @@ class CatalogController extends Controller
         $catalog->description = $request->get('description');
         $catalog->save();
         $files = $request->get('files');
-        $this->image->saveImage($files, $catalog);
+        $this->image->saveImage($files, $catalog, true);
         return $catalog;
     }
-
 
     public function show($catalog)
     {
