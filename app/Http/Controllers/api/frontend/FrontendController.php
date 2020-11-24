@@ -11,7 +11,7 @@ use App\Models\Lightning;
 use App\Models\Component;
 use App\Models\LightningCatalog;
 use App\Models\ComponentCatalog;
-use App\models\OurObject;
+use App\Models\OurObject;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
