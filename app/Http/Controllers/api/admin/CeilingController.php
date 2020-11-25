@@ -68,7 +68,6 @@ class CeilingController extends Controller
                 }
                 $cat->images()->delete();
             }
-
             $cat->delete();
             return Ceiling::all();
 
