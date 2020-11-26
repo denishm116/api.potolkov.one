@@ -35,33 +35,33 @@ class FrontendController extends Controller
 
     public function children($slug)
     {
-        return Catalog::with(['images', 'children', 'ceilings', 'children.ceilings'])->where('slug', $slug)->first();
+        return Catalog::defaultOrder()->where('slug', $slug)->with(['images', 'children', 'ceilings', 'children.ceilings'])->firstOrFail();
     }
 
     public function lightning_children($slug)
     {
-        return LightningCatalog::with(['images', 'children', 'lightnings', 'children.lightnings'])->where('slug', $slug)->first();
+        return LightningCatalog::with(['images', 'children', 'lightnings', 'children.lightnings'])->where('slug', $slug)->firstOrFail();
     }
 
     public function component_children($slug)
     {
-        return ComponentCatalog::with(['images', 'children', 'components', 'children.components'])->where('slug', $slug)->first();
+        return ComponentCatalog::with(['images', 'children', 'components', 'children.components'])->where('slug', $slug)->firstOrFail();
     }
 
 
     public function ceilings($slug)
     {
-        return Ceiling::with(['images', 'catalog'])->where('slug', $slug)->first();
+        return Ceiling::with(['images', 'catalog'])->where('slug', $slug)->firstOrFail();
     }
 
     public function lightnings($slug)
     {
-        return Lightning::with(['images', 'lightning_catalog'])->where('slug', $slug)->first();
+        return Lightning::with(['images', 'lightning_catalog'])->where('slug', $slug)->firstOrFail();
     }
 
     public function components($slug)
     {
-        return Component::with(['images', 'component_catalog'])->where('slug', $slug)->first();
+        return Component::with(['images', 'component_catalog'])->where('slug', $slug)->firstOrFail();
     }
 
     public function ourObjectsForCeiling($slug)

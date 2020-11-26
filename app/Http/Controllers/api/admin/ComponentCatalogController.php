@@ -37,7 +37,7 @@ class ComponentCatalogController extends Controller
 
         $files = $request->get('files');
 
-        $this->image->saveImage($files, $catalog);
+        $this->image->saveImage($files, $catalog, true);
         return $catalog;
     }
 
@@ -89,7 +89,7 @@ class ComponentCatalogController extends Controller
     public function addImages(Request $request)
     {
         $entity = ComponentCatalog::class;
-        $this->image->addImages($request, $entity);
+        $this->image->addImages($request, $entity, true);
     }
 
     public function changeMainImage($id)
