@@ -86,6 +86,12 @@ class FrontendController extends Controller
         })->get();
     }
 
+    public function ourObjectsForLanding()
+    {
+//        dd(OurObject::with('images', 'catalogs', 'ceilings')->where('landing', 1)->get());
+        return OurObject::with('images', 'catalogs', 'ceilings')->where('landing', 1)->get();
+    }
+
     public function ArticlesForCatalog($slug)
     {
         return Article::with('images', 'catalogs', 'ceilings')->whereHas('catalogs', function($q) use($slug) {

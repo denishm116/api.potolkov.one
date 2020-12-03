@@ -25,14 +25,6 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function testapi(Request $request)
-    {
-        return response()->json([
-            'success' => true,
-            'user' => $request->user()
-        ]);
-    }
-
 
     public function testapi2(Request $request)
     {

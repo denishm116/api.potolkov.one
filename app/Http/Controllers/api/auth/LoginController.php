@@ -96,4 +96,14 @@ class LoginController extends Controller
             'success' => true
         ], 200);
     }
+
+
+    public function home(Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'user' => $request->user()
+        ]);
+    }
+
 }

@@ -12,10 +12,8 @@ Route::group(['prefix' => '/auth', ['middleware' => ['throttle:20,5']]], functio
 });
 
 Route::group(['middleware' => ['jwt.auth']], function () {
-    Route::get('/home', 'HomeController@testapi');
+    Route::get('/home', 'api\auth\LoginController@home');
 });
-
-Route::get('/test', 'HomeController@testapi2');
 
 Route::group(['prefix' => '/admin'], function () {
 
@@ -25,9 +23,11 @@ Route::group(['prefix' => '/admin'], function () {
     Route::post('/Article/addImages', 'api\admin\ArticleController@addImages');
 
     Route::apiResource('/ourObject', 'api\admin\OurObjectController');
+    Route::get('/ourObject/changeLanding/{id}', 'api\admin\OurObjectController@changeLanding');
     Route::get('/ourObject/changeMainImage/{id}', 'api\admin\OurObjectController@changeMainImage');
     Route::get('/ourObject/deleteImage/{id}', 'api\admin\OurObjectController@deleteImage');
     Route::post('/ourObject/addImages', 'api\admin\OurObjectController@addImages');
+
 
     Route::apiResource('/catalog', 'api\admin\CatalogController');
     Route::post('/catalog/{catalog}/up', 'api\admin\CatalogController@up');
@@ -99,6 +99,8 @@ Route::group(['prefix' => '/frontend'], function () {
 
     Route::get('/ourObjects', 'api\frontend\FrontendController@ourObjects');
     Route::get('/ourObject/{id}', 'api\frontend\FrontendController@ourObject');
+
+    Route::get('/ourObjectsForLanding', 'api\frontend\FrontendController@ourObjectsForLanding');
 
     Route::post('/sendMail', 'api\frontend\FrontendController@sendMail');
 });

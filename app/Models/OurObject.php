@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+
 class OurObject extends Model
 {
     protected $fillable = ['title',  'address', 'square', 'description', 'price'];
@@ -28,4 +29,5 @@ class OurObject extends Model
     public function getMainImageAttribute() {
         return $this->images->where('main', 1)->first()->path ?? null;
     }
+
 }

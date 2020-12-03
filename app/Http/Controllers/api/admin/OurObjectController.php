@@ -97,4 +97,12 @@ class OurObjectController extends Controller
     {
         $this->image->deleteImage($id);
     }
+
+    public function changeLanding($id)
+    {
+        $object = OurObject::findOrFail($id);
+        $object->landing = !$object->landing;
+        $object->save();
+        return $object;
+    }
 }
