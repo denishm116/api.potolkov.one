@@ -46,12 +46,9 @@ class Image extends Model
     {
         $image = self::findOrFail($id);
         Storage::disk('local')->delete('/public/' . $image->path);
-
         if ($image->thumb)
             Storage::disk('local')->delete('/public/' . $image->thumb);
-
         $image->delete();
-
         if (isset($image) && $image->main) {
             if ($last = self::where('imageable_type', $image->imageable_type)->where('imageable_id', $image->imageable_id)->first()) {
                 $last->main = 1;
@@ -68,7 +65,6 @@ class Image extends Model
             $main = 1;
         return DB::transaction(function () use ($request, $entity, $thumbs) {
             foreach ($request->get('images') as $key => $file) {
-
                 if ($key == 0 && !count($entity->images))
                     $main = 1;
                 else

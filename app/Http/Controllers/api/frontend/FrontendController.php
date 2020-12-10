@@ -73,7 +73,6 @@ class FrontendController extends Controller
 
     public function ArticlesForCeiling($slug)
     {
-
         return Article::with('images', 'catalogs', 'ceilings')->whereHas('ceilings', function($q) use($slug) {
             $q->where('slug', $slug);
         })->limit(4)->get();
@@ -88,7 +87,6 @@ class FrontendController extends Controller
 
     public function ourObjectsForLanding()
     {
-//        dd(OurObject::with('images', 'catalogs', 'ceilings')->where('landing', 1)->get());
         return OurObject::with('images', 'catalogs', 'ceilings')->where('landing', 1)->get();
     }
 
@@ -101,22 +99,22 @@ class FrontendController extends Controller
 
     public function articles()
     {
-        return Article::with('images', 'catalogs', 'ceilings')->get();
+        return Article::with('images', 'catalogs', 'ceilings', 'subArticles')->get();
     }
 
     public function article($id)
     {
-        return Article::with('images', 'catalogs', 'ceilings')->where('id', $id)->first();
+        return Article::with('images', 'catalogs', 'ceilings', 'subArticles', 'subArticles.images')->where('id', $id)->first();
     }
 
     public function ourObjects()
     {
-        return ourObject::with('images', 'catalogs', 'ceilings')->get();
+        return OurObject::with('images', 'catalogs', 'ceilings')->orderBy('id', 'DESC')->get();
     }
 
     public function ourObject($id)
     {
-        return ourObject::with('images', 'catalogs', 'ceilings')->where('id', $id)->first();
+        return OurObject::with('images', 'catalogs', 'ceilings')->where('id', $id)->first();
     }
 
     public function sendMail(Request $request) {

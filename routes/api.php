@@ -17,17 +17,17 @@ Route::group(['middleware' => ['jwt.auth']], function () {
 
 Route::group(['prefix' => '/admin'], function () {
 
+    Route::post('/images/addImages', 'api\admin\ImageController@addImages');
+    Route::get('/images/changeMainImage/{id}', 'api\admin\ImageController@changeMainImage');
+    Route::get('/images/deleteImage/{id}', 'api\admin\ImageController@deleteImage');
+
     Route::apiResource('/Article', 'api\admin\ArticleController');
-    Route::get('/Article/changeMainImage/{id}', 'api\admin\ArticleController@changeMainImage');
-    Route::get('/Article/deleteImage/{id}', 'api\admin\ArticleController@deleteImage');
-    Route::post('/Article/addImages', 'api\admin\ArticleController@addImages');
 
     Route::apiResource('/ourObject', 'api\admin\OurObjectController');
     Route::get('/ourObject/changeLanding/{id}', 'api\admin\OurObjectController@changeLanding');
     Route::get('/ourObject/changeMainImage/{id}', 'api\admin\OurObjectController@changeMainImage');
     Route::get('/ourObject/deleteImage/{id}', 'api\admin\OurObjectController@deleteImage');
     Route::post('/ourObject/addImages', 'api\admin\OurObjectController@addImages');
-
 
     Route::apiResource('/catalog', 'api\admin\CatalogController');
     Route::post('/catalog/{catalog}/up', 'api\admin\CatalogController@up');
@@ -37,7 +37,6 @@ Route::group(['prefix' => '/admin'], function () {
     Route::get('/catalog/deleteImage/{id}', 'api\admin\CatalogController@deleteImage');
     Route::post('/catalog/addImages', 'api\admin\CatalogController@addImages');
 
-
     Route::apiResource('/lightning_catalog', 'api\admin\LightningCatalogController');
     Route::post('/lightning_catalog/{lightning_catalog}/up', 'api\admin\LightningCatalogController@up');
     Route::post('/lightning_catalog/{lightning_catalog}/down', 'api\admin\LightningCatalogController@down');
@@ -46,7 +45,6 @@ Route::group(['prefix' => '/admin'], function () {
     Route::get('/lightning_catalog/deleteImage/{id}', 'api\admin\LightningCatalogController@deleteImage');
     Route::post('/lightning_catalog/addImages', 'api\admin\LightningCatalogController@addImages');
 
-
     Route::apiResource('/component_catalog', 'api\admin\ComponentCatalogController');
     Route::post('/component_catalog/{component_catalog}/up', 'api\admin\ComponentCatalogController@up');
     Route::post('/component_catalog/{component_catalog}/down', 'api\admin\ComponentCatalogController@down');
@@ -54,7 +52,6 @@ Route::group(['prefix' => '/admin'], function () {
     Route::get('/component_catalog/changeMainImage/{id}', 'api\admin\ComponentCatalogController@changeMainImage');
     Route::get('/component_catalog/deleteImage/{id}', 'api\admin\ComponentCatalogController@deleteImage');
     Route::post('/component_catalog/addImages', 'api\admin\ComponentCatalogController@addImages');
-
 
     Route::apiResource('/ceilings', 'api\admin\CeilingController');
     Route::get('/ceilings/changeMainImage/{id}', 'api\admin\CeilingController@changeMainImage');

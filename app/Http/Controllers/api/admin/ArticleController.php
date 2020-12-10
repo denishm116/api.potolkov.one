@@ -5,54 +5,35 @@ namespace App\Http\Controllers\api\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\Image;
+use App\Models\SubArticle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ArticleController extends Controller
 {
-    private $image;
 
-    public function __construct(Image $image)
-    {
-        $this->image = $image;
-    }
 
     public function index()
     {
-        return Article::with('catalogs', 'ceilings')->get();
+        return Article::with('catalogs', 'ceilings', 'subArticles')->get();
     }
 
 
     public function store(Request $request)
     {
-        $article = Article::make([
-            'title' => $request->get('title'),
-            'meta_description' => $request->get('metaDescription'),
-            'description' => $request->get('description'),
-        ]);
-        $article->save();
-        $files = $request->get('images');
-
-        $this->image->saveImage($files, $article, true);
-        $article->catalogs()->attach($request->get('catalogs'));
-        $article->ceilings()->attach($request->get('ceilings'));
+        Article::create($request);
     }
 
 
     public function show($id)
     {
-        return Article::with('images', 'catalogs', 'ceilings')->where('id', $id)->first();
+        return Article::with('images', 'catalogs', 'ceilings', 'subArticles', 'subArticles.images')->where('id', $id)->first();
     }
 
 
     public function update(Request $request, $id)
     {
-        $article = Article::findOrFail($id);
-        $article->fill($request->except(['id']));
-        $article->save();
-        $article->catalogs()->sync($request->get('catalogs'));
-        $article->ceilings()->sync($request->get('ceilings'));
-        return $article;
+       return Article::updateArticle($request, $id);
     }
 
 
@@ -73,19 +54,5 @@ class ArticleController extends Controller
         }
     }
 
-    public function addImages(Request $request)
-    {
-        $entity = Article::class;
-        $this->image->addImages($request, $entity, true);
-    }
 
-    public function changeMainImage($id)
-    {
-        $this->image->changeMain($id);
-    }
-
-    public function deleteImage($id)
-    {
-        $this->image->deleteImage($id);
-    }
 }

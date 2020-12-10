@@ -81,7 +81,6 @@ class LoginController extends Controller
             ], 422);
         }
 
-//        return $this->sendFailedLoginResponse($request);
         return response()->json([
             'success' => true,
             'data' => $request->user(),
@@ -103,7 +102,7 @@ class LoginController extends Controller
         return response()->json([
             'success' => true,
             'user' => $request->user()
-        ]);
+        ], 200);
     }
 
 }
