@@ -102,6 +102,14 @@ class FrontendController extends Controller
         return Article::with('images', 'catalogs', 'ceilings', 'subArticles')->get();
     }
 
+
+    public function articlesShortList()
+    {
+        return Article::with('images', 'catalogs', 'ceilings', 'subArticles')->limit(4)->get();
+    }
+
+
+
     public function article($id)
     {
         return Article::with('images', 'catalogs', 'ceilings', 'subArticles', 'subArticles.images')->where('id', $id)->first();

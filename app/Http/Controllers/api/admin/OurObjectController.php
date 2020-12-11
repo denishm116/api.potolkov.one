@@ -35,6 +35,7 @@ class OurObjectController extends Controller
             'square' => $request->get('square'),
             'description' => $request->get('description'),
             'price' => $request->get('price'),
+            'landing' => $request->get('landing')
         ]);
         $ourObject->save();
         $files = $request->get('images');

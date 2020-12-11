@@ -91,6 +91,7 @@ Route::group(['prefix' => '/frontend'], function () {
     Route::get('/getComponentChildren/{slug}', 'api\frontend\FrontendController@component_children');
     Route::get('/getComponent/{slug}', 'api\frontend\FrontendController@components');
 
+    Route::get('/articlesShortList', 'api\frontend\FrontendController@articlesShortList');
     Route::get('/articles', 'api\frontend\FrontendController@articles');
     Route::get('/article/{id}', 'api\frontend\FrontendController@article');
 

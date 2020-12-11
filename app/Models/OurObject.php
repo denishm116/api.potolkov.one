@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OurObject extends Model
 {
-    protected $fillable = ['title',  'address', 'square', 'description', 'price'];
+    protected $fillable = ['title',  'address', 'square', 'description', 'price', 'landing'];
     protected $hidden = ['updated_at', 'deleted_at'];
     protected $appends = ['mainImage'];
 
